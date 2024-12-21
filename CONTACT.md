@@ -1,4 +1,4 @@
-## Contact
+# Contact
 
 For more information, contact:
 
