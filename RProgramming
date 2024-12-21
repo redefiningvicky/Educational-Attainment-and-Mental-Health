@@ -1,0 +1,1156 @@
+---
+title: "Educational Attainment and Mental Health"
+subtitle: What is the correlation between educational attainment and mental health in Sacramento County?
+author: Vicky Wong
+school: University of California, Davis
+class: CRD 150: Quantitative Methods in Community Research
+date: December 21, 2024
+output: 
+  html_document:
+    theme: cosmo
+---
+
+
+```{r setup, include=FALSE}
+# Do not edit this code block/chunk
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message = FALSE)
+knitr::opts_knit$set(progress = TRUE, verbose = TRUE)
+```
+
+Library
+
+```{r}
+#Loaded in all necessary packages using the function library()
+library(tidyverse)
+library(tidycensus)
+library(flextable)
+library(webshot)
+library(ggplot2)
+library(VIM)
+library(sf)
+library(tigris)
+library(tmap)
+library(RColorBrewer)
+library(rmapshaper)
+library(tidygeocoder)
+```
+
+Setup
+
+```{r}
+#set working directory using setwd()
+setwd("C:/Users/VickyWong/Documents/EducationalAttainmentandMentalHealthFolder")
+```
+
+1) Depression 2) Fair or Poor 3) Mental Health
+
+```{r}
+#loaded and saved csv file using read_csv()
+Depression <- read_csv("Depression.csv")
+
+#looked at file using glimpse()
+glimpse(Depression)
+
+#loaded and saved csv file using read_csv()
+FairorPoor <- read_csv("FairorPoor.csv")
+
+#looked at file using glimpse()
+glimpse(FairorPoor)
+
+#loaded and saved csv file using read_csv()
+MentalHealth <- read_csv("MentalHealth.csv")
+
+#looked at file using glimpse()
+glimpse(MentalHealth)
+```
+
+Rename Variables 1) Depression 2) Fair or Poor 3) Mental Health
+
+```{r}
+#looked at variables using names()
+names(Depression)
+
+#renamed variable using rename()
+Depression <- Depression %>%
+          rename("depression" = "p_crd_depression")
+
+#looked at file using glimpse()
+glimpse(Depression)
+
+#looked at variables using names()
+names(FairorPoor)
+
+#renamed variable using rename()
+FairorPoor <- FairorPoor %>%
+          rename("ghlth" = "p_crd_ghlth")
+
+#looked at file using glimpse()
+glimpse(FairorPoor)
+
+#looked at variables using names()
+names(MentalHealth)
+
+#renamed variable using rename()
+MentalHealth <- MentalHealth %>%
+          rename("mhlth" = "p_crd_mhlth")
+
+#looked at file using glimpse()
+glimpse(MentalHealth)
+```
+
+Educational Attainment
+
+```{r}
+#loaded and saved csv file using read_csv()
+HighSchool <- read_csv("HighSchool.csv")
+
+#looked at file using glimpse()
+glimpse(HighSchool)
+
+#loaded and saved csv file using read_csv()
+GED <- read_csv("GED.csv")
+
+#looked at file using glimpse()
+glimpse(GED)
+
+#loaded and saved csv file using read_csv()
+SomeCollegeAssociate <- read_csv("SomeCollegeorAssociate.csv")
+
+#looked at file using glimpse()
+glimpse(SomeCollegeAssociate)
+
+#loaded and saved csv file using read_csv()
+Bachelor <- read_csv("Bachelor.csv")
+
+#looked at file using glimpse()
+glimpse(Bachelor)
+
+#loaded and saved csv file using read_csv()
+Bachelor <- read_csv("Bachelor.csv")
+
+#looked at file using glimpse()
+glimpse(Bachelor)
+
+#loaded and saved csv file using read_csv()
+Graduate <- read_csv("Graduate.csv")
+
+#looked at file using glimpse()
+glimpse(Graduate)
+
+#loaded and saved csv file using read_csv()
+Professional <- read_csv("Professional.csv")
+
+#looked at file using glimpse()
+glimpse(Professional)
+
+#loaded and saved csv file using read_csv()
+Doctorate <- read_csv("Doctorate.csv")
+
+#looked at file using glimpse()
+glimpse(Doctorate)
+```
+
+High School
+
+```{r}
+#looked at variables using names()
+names(HighSchool)
+
+#looked at variables using names()
+names(MentalHealth)
+
+#merged data frame using left_join()
+HighSchool.MentalHealth <- left_join(HighSchool, MentalHealth, by = c("GeoID" = "GeoID"))
+                             
+#looked at file using glimpse()
+glimpse(HighSchool.MentalHealth)
+
+#looked at variables using names()
+names(HighSchool.MentalHealth)
+
+#looked for class of variable using class()
+class(HighSchool.MentalHealth$phs)
+
+#used as.numeric() to set variable as numeric
+HighSchool.MentalHealth$phs <- as.numeric(as.character(HighSchool.MentalHealth$phs))
+
+#looked for class of variable using class()
+class(HighSchool.MentalHealth$mhlth)
+
+#used as.numeric() to set variable as numeric
+HighSchool.MentalHealth$mhlth <- as.numeric(as.character(HighSchool.MentalHealth$mhlth))
+
+# Used scatterplot to determine correlation between numeric variables, used geom_point()
+ggplot(HighSchool.MentalHealth) +
+    geom_point(mapping = aes(x=phs, y=mhlth)) +
+    ggtitle("Correlation Between High School Diploma and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with High School Diploma") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),  
+        plot.margin = margin(10, 10, 10, 10)  
+    )
+
+# Save the scatterplot
+phsmhlth <- ggplot(HighSchool.MentalHealth) +
+    geom_point(mapping = aes(x=phs, y=mhlth)) +
+    ggtitle("Correlation Between High School Diploma and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with High School Diploma") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),  
+        plot.margin = margin(10, 10, 10, 10)  
+    )
+
+# Save the scatterplot using ggsave()
+ggsave("phsmhlth1.png", phsmhlth, width = 16, height = 9, units = "in", dpi = 300)
+
+#calculated correlation using cor()
+HighSchool.MentalHealth %>%
+  summarize(Correlation = cor(phs,mhlth, use = "complete.obs"))
+
+#created flextable using flextable()
+phsmhlth.correlation <- HighSchool.MentalHealth %>%
+  summarize(Correlation = cor(phs,mhlth, use = "complete.obs")) %>%
+  st_drop_geometry() %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  add_header_lines("Correlation Between High School Diploma and Not Good Mental Health Days (Sacramento County)") %>%
+ align(align = "center", part = "all")
+
+phsmhlth.correlation
+
+#saved flextable using save_as_image
+save_as_image(phsmhlth.correlation, path = "phsmhlth2.png", width = 1600, height = 900)
+```
+
+GED 
+
+```{r}
+#looked at variables using names()
+names(GED)
+
+#looked at variables using names()
+names(MentalHealth)
+
+#merged data frame using left_join()
+GED.MentalHealth <- left_join(GED, MentalHealth, by = c("GeoID" = "GeoID"))
+                             
+#looked at file using glimpse()
+glimpse(GED.MentalHealth)
+
+#looked at variables using names()
+names(GED.MentalHealth)
+
+#looked for class of variable using class()
+class(GED.MentalHealth$pged)
+
+#used as.numeric() to set variable as numeric
+GED.MentalHealth$pged <- as.numeric(as.character(GED.MentalHealth$pged))
+
+#looked for class of variable using class()
+class(GED.MentalHealth$mhlth)
+
+#used as.numeric() to set variable as numeric
+GED.MentalHealth$mhlth <- as.numeric(as.character(GED.MentalHealth$mhlth))
+
+# Used scatterplot to determine correlation between numeric variables, used geom_point()
+ggplot(GED.MentalHealth) +
+    geom_point(mapping = aes(x=pged, y=mhlth)) +
+    ggtitle("Correlation Between GED and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with GED") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),  
+        plot.margin = margin(10, 10, 10, 10)  
+    )
+
+# Saved scatterplot
+pgedmhlth <- ggplot(GED.MentalHealth) +
+    geom_point(mapping = aes(x=pged, y=mhlth)) +
+    ggtitle("Correlation Between GED and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with GED") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Saved scatterplot using ggsave()
+ggsave("pgedmhlth1.png", pgedmhlth, width = 16, height = 9, units = "in", dpi = 300)
+
+
+#calculated correlation using cor()
+GED.MentalHealth %>%
+  summarize(Correlation = cor(pged,mhlth, use = "complete.obs"))
+
+#created flextable using flextable()
+pgedmhlth.correlation <- GED.MentalHealth %>%
+  summarize(Correlation = cor(pged,mhlth, use = "complete.obs")) %>%
+  st_drop_geometry() %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  add_header_lines("Correlation Between GED and Not Good Mental Health Days (Sacramento County)") %>%
+ align(align = "center", part = "all")
+
+pgedmhlth.correlation
+
+#saved flextable using save_as_image
+save_as_image(pgedmhlth.correlation, path = "pgedmhlth2.png", width = 1600, height = 900)
+```
+
+Some College or Associate's Degree
+
+```{r}
+#looked at variables using names()
+names(SomeCollegeAssociate)
+
+#looked at variables using names()
+names(MentalHealth)
+
+#merged data frame using left_join()
+SomeCollegeAssociate.MentalHealth <- left_join(SomeCollegeAssociate, MentalHealth, by = c("GeoID" = "GeoID"))
+                             
+#looked at file using glimpse()
+glimpse(SomeCollegeAssociate.MentalHealth)
+
+#looked at variables using names()
+names(SomeCollegeAssociate.MentalHealth)
+
+#looked for class of variable using class()
+class(SomeCollegeAssociate.MentalHealth$psmcolass)
+
+#used as.numeric() to set variable as numeric
+SomeCollegeAssociate.MentalHealth$psmcolass <- as.numeric(as.character(SomeCollegeAssociate.MentalHealth$psmcolass))
+
+#looked for class of variable using class()
+class(SomeCollegeAssociate.MentalHealth$mhlth)
+
+#used as.numeric() to set variable as numeric
+SomeCollegeAssociate.MentalHealth$mhlth <- as.numeric(as.character(SomeCollegeAssociate.MentalHealth$mhlth))
+
+# Used scatterplot to determine correlation between numeric variables, used geom_point()
+ggplot(SomeCollegeAssociate.MentalHealth) +
+    geom_point(mapping = aes(x=psmcolass, y=mhlth)) +
+    ggtitle("Correlation Between Some College or Associate's Degree and Not Good Mental Health Days (Sacramento County)") +
+    theme(
+        plot.title = element_text(size = 12, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    ) +
+    xlab("Percentage Population with Some College or Associate's Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days")
+
+# Saved scatterplot
+psmcolassmhlth <- ggplot(SomeCollegeAssociate.MentalHealth) +
+    geom_point(mapping = aes(x=psmcolass, y=mhlth)) +
+    ggtitle("Correlation Between Some College or Associate's Degree and Not Good Mental Health Days (Sacramento County)") +
+    theme(
+        plot.title = element_text(size = 12, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    ) +
+    xlab("Percentage Population with Some College or Associate's Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days")
+
+# Saved scatterplot using ggsave()
+ggsave("psmcolassmhlth1.png", psmcolassmhlth, width = 16, height = 9, units = "in", dpi = 300)
+
+#calculated correlation using cor()
+SomeCollegeAssociate.MentalHealth %>%
+  summarize(Correlation = cor(psmcolass,mhlth, use = "complete.obs"))
+
+#created flextable using flextable()
+psmcolassmhlth.correlation <- SomeCollegeAssociate.MentalHealth %>%
+  summarize(Correlation = cor(psmcolass,mhlth, use = "complete.obs")) %>%
+  st_drop_geometry() %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  add_header_lines("Correlation Between Some College or Associate's Degree and Not Good Mental Health Days (Sacramento County)") %>%
+ align(align = "center", part = "all")
+
+psmcolassmhlth.correlation
+
+#saved flextable using save_as_image
+save_as_image(psmcolassmhlth.correlation, path = "psmcolassmhlth2.png", width = 1600, height = 900)
+```
+
+Bachelor's Degree
+
+```{r}
+#looked at variables using names()
+names(Bachelor)
+
+#looked at variables using names()
+names(MentalHealth)
+
+#merged data frame using left_join()
+Bachelor.MentalHealth <- left_join(Bachelor, MentalHealth, by = c("GeoID" = "GeoID"))
+                             
+#looked at file using glimpse()
+glimpse(Bachelor.MentalHealth)
+
+#looked at variables using names()
+names(Bachelor.MentalHealth)
+
+#looked for class of variable using class()
+class(Bachelor.MentalHealth$pbach)
+
+#used as.numeric() to set variable as numeric
+Bachelor.MentalHealth$pbach <- as.numeric(as.character(Bachelor.MentalHealth$pbach))
+
+#looked for class of variable using class()
+class(Bachelor.MentalHealth$mhlth)
+
+#used as.numeric() to set variable as numeric
+Bachelor.MentalHealth$mhlth <- as.numeric(as.character(Bachelor.MentalHealth$mhlth))
+
+# Used scatterplot to determine correlation between numeric variables, used geom_point()
+ggplot(Bachelor.MentalHealth) +
+    geom_point(mapping = aes(x=pbach, y=mhlth)) +
+    ggtitle("Correlation Between Bachelor's Degree and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with Bachelor's Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Saved scatterplot
+pbachmhlth <- ggplot(Bachelor.MentalHealth) +
+    geom_point(mapping = aes(x=pbach, y=mhlth)) +
+    ggtitle("Correlation Between Bachelor's Degree and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with Bachelor's Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Saved scatterplot using ggsave()
+ggsave("pbachmhlth1.png", pbachmhlth, width = 16, height = 9, units = "in", dpi = 300)
+
+#calculated correlation using cor()
+Bachelor.MentalHealth %>%
+  summarize(Correlation = cor(pbach,mhlth, use = "complete.obs"))
+
+#created flextable using flextable()
+pbachmhlth.correlation <- Bachelor.MentalHealth %>%
+  summarize(Correlation = cor(pbach,mhlth, use = "complete.obs")) %>%
+  st_drop_geometry() %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  add_header_lines("Correlation Between Bachelor's Degree and Not Good Mental Health Days (Sacramento County)") %>%
+ align(align = "center", part = "all")
+
+pbachmhlth.correlation
+
+#saved flextable using save_as_image
+save_as_image(pbachmhlth.correlation, path = "pbachmhlth2.png", width = 1600, height = 900)
+```
+
+PostGraduate Degree
+
+```{r}
+#looked at variables using names()
+names(Graduate)
+
+#looked at variables using names()
+names(MentalHealth)
+
+#merged data frame using left_join()
+Graduate.MentalHealth <- left_join(Graduate, MentalHealth, by = c("GeoID" = "GeoID"))
+                             
+#looked at file using glimpse()
+glimpse(Graduate.MentalHealth)
+
+#looked at variables using names()
+names(Graduate.MentalHealth)
+
+#looked for class of variable using class()
+class(Graduate.MentalHealth$pgtbach)
+
+#used as.numeric() to set variable as numeric
+Graduate.MentalHealth$pgtbach <- as.numeric(as.character(Graduate.MentalHealth$pgtbach))
+
+#looked for class of variable using class()
+class(Graduate.MentalHealth$mhlth)
+
+#used as.numeric() to set variable as numeric
+Graduate.MentalHealth$mhlth <- as.numeric(as.character(Graduate.MentalHealth$mhlth))
+
+# Used scatterplot to determine correlation between numeric variables, used geom_point()
+ggplot(Graduate.MentalHealth) +
+    geom_point(mapping = aes(x=pgtbach, y=mhlth)) +
+    ggtitle("Correlation Between Graduate Degree and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with Graduate Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Saved scatterplot
+pgtbachmhlth <- ggplot(Graduate.MentalHealth) +
+    geom_point(mapping = aes(x=pgtbach, y=mhlth)) +
+    ggtitle("Correlation Between Graduate Degree and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with Graduate Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Save the scatterplot using ggsave()
+ggsave("pgtbachmhlth1.png", pgtbachmhlth, width = 16, height = 9, units = "in", dpi = 300)
+
+#calculated correlation using cor()
+Graduate.MentalHealth %>%
+  summarize(Correlation = cor(pgtbach,mhlth, use = "complete.obs"))
+
+#created flextable using flextable()
+pgtbachmhlth.correlation <- Graduate.MentalHealth %>%
+  summarize(Correlation = cor(pgtbach,mhlth, use = "complete.obs")) %>%
+  st_drop_geometry() %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  add_header_lines("Correlation Between Graduate Degree and Not Good Mental Health Days (Sacramento County)") %>%
+ align(align = "center", part = "all")
+
+pgtbachmhlth.correlation
+
+#saved flextable using save_as_image
+save_as_image(pgtbachmhlth.correlation, path = "pgtbachmhlth2.png", width = 1600, height = 900)
+```
+
+Professional Degree
+
+```{r}
+#looked at variables using names()
+names(Professional)
+
+#looked at variables using names()
+names(MentalHealth)
+
+#merged data frame using left_join()
+Professional.MentalHealth <- left_join(Professional, MentalHealth, by = c("GeoID" = "GeoID"))
+                             
+#looked at file using glimpse()
+glimpse(Professional.MentalHealth)
+
+#looked at variables using names()
+names(Professional.MentalHealth)
+
+#looked for class of variable using class()
+class(Professional.MentalHealth$pprofessional)
+
+#used as.numeric() to set variable as numeric
+Professional.MentalHealth$pprofessional <- as.numeric(as.character(Professional.MentalHealth$pprofessional))
+
+#looked for class of variable using class()
+class(Professional.MentalHealth$mhlth)
+
+#used as.numeric() to set variable as numeric
+Professional.MentalHealth$mhlth <- as.numeric(as.character(Professional.MentalHealth$mhlth))
+
+# Used scatterplot to determine correlation between numeric variables, used geom_point()
+ggplot(Professional.MentalHealth) +
+    geom_point(mapping = aes(x=pprofessional, y=mhlth)) +
+    ggtitle("Correlation Between Professional Degree and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with Professional Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Save the scatterplot with adjusted font size
+pprofessionalmhlth <- ggplot(Professional.MentalHealth) +
+    geom_point(mapping = aes(x=pprofessional, y=mhlth)) +
+    ggtitle("Correlation Between Professional Degree and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with Professional Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Save the scatterplot using ggsave()
+ggsave("pprofessionalmhlth1.png", pprofessionalmhlth, width = 16, height = 9, units = "in", dpi = 300)
+
+#calculated correlation using cor()
+Professional.MentalHealth %>%
+  summarize(Correlation = cor(pprofessional,mhlth, use = "complete.obs"))
+
+#created flextable using flextable()
+pprofessionalmhlth.correlation <- Professional.MentalHealth %>%
+  summarize(Correlation = cor(pprofessional,mhlth, use = "complete.obs")) %>%
+  st_drop_geometry() %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  add_header_lines("Correlation Between Professional Degree and Not Good Mental Health Days (Sacramento County)") %>%
+ align(align = "center", part = "all")
+
+pprofessionalmhlth.correlation
+
+#saved flextable using save_as_image
+save_as_image(pprofessionalmhlth.correlation, path = "pprofessionalmhlth2.png", width = 1600, height = 900)
+```
+
+Doctorate Degree
+
+```{r}
+#looked at variables using names()
+names(Doctorate)
+
+#looked at variables using names()
+names(MentalHealth)
+
+#merged data frame using left_join()
+Doctorate.MentalHealth <- left_join(Doctorate, MentalHealth, by = c("GeoID" = "GeoID"))
+                             
+#looked at file using glimpse()
+glimpse(Doctorate.MentalHealth)
+
+#looked at variables using names()
+names(Doctorate.MentalHealth)
+
+#looked for class of variable using class()
+class(Doctorate.MentalHealth$pdoctorate)
+
+#used as.numeric() to set variable as numeric
+Doctorate.MentalHealth$pdoctorate <- as.numeric(as.character(Doctorate.MentalHealth$pdoctorate))
+
+#looked for class of variable using class()
+class(Doctorate.MentalHealth$mhlth)
+
+#used as.numeric() to set variable as numeric
+Doctorate.MentalHealth$mhlth <- as.numeric(as.character(Doctorate.MentalHealth$mhlth))
+
+# Used scatterplot to determine correlation between numeric variables, used geom_point()
+ggplot(Doctorate.MentalHealth) +
+    geom_point(mapping = aes(x=pdoctorate, y=mhlth)) +
+    ggtitle("Correlation Between Doctorate Degree and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with Doctorate Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Saved scatterplot with adjusted title font size
+pdoctoratemhlth <- ggplot(Doctorate.MentalHealth) +
+    geom_point(mapping = aes(x=pdoctorate, y=mhlth)) +
+    ggtitle("Correlation Between Doctorate Degree and Not Good Mental Health Days (Sacramento County)") +
+    xlab("Percentage Population with Doctorate Degree") +
+    ylab("Percentage Population with Mental Health Not Good for >= 14 Days") +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.margin = margin(10, 10, 10, 10)
+    )
+
+# Save the scatterplot using ggsave
+ggsave("pdoctoratemhlth1.png", pdoctoratemhlth, width = 16, height = 9, units = "in", dpi = 300)
+
+#calculated correlation using cor()
+Doctorate.MentalHealth %>%
+  summarize(Correlation = cor(pdoctorate,mhlth, use = "complete.obs"))
+
+#created flextable using flextable()
+pdoctoratemhlth.correlation <- Doctorate.MentalHealth %>%
+  summarize(Correlation = cor(pdoctorate,mhlth, use = "complete.obs")) %>%
+  st_drop_geometry() %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  add_header_lines("Correlation Between Doctorate Degree and Not Good Mental Health Days (Sacramento County)") %>%
+ align(align = "center", part = "all")
+
+pdoctoratemhlth.correlation
+
+#saved flextable using save_as_image
+save_as_image(pdoctoratemhlth.correlation, path = "pdoctoratemhlth2.png", width = 1600, height = 900)
+```
+
+U.S. Census Bureau - Total Population Percentage
+
+```{r}
+#loaded census using census_api_key
+census_api_key("b4991c68b327f2514ac5c1ec2b2a6fce1490a75d")
+
+#saved census variable using load_variables
+Census <- load_variables(2022, "acs5", cache = TRUE)
+
+#looked at file using glimpse()
+glimpse(Census)
+
+#extracted census data using get_acs()
+HighSchool.tracts1 <- get_acs(geography = "tract",
+              year = 2022,
+              variables = c(TotalPopulation = "B01001A_001",
+                            HighSchoolMale18to24Years = "B15001_006",
+                            HighSchoolMale25to34Years = "B15001_014",
+                            HighSchoolMale35to44Years = "B15001_022",
+                            HighSchoolMale45to64Years = "B15001_030",
+                            HighSchoolMale65YearsandOver = "B15001_038",
+                            HighSchoolFemale18to24Years = "B15001_047",
+                            HighSchoolFemale25to34Years = "B15001_055",
+                            HighSchoolFemale35to44Years = "B15001_063",
+                            HighSchoolFemale45to64Years = "B15001_071",
+                            HighSchoolFemale65YearsandOver = "B15001_079"),
+              state = "CA",
+              county = "Sacramento",
+              survey = "acs5",
+              output = "wide",
+              geometry = TRUE)
+
+#looked at file using glimpse()
+glimpse(HighSchool.tracts1)
+
+#extracted census data using get_acs()
+SomeCollege.tracts1 <- get_acs(geography = "tract",
+              year = 2022,
+              variables = c(TotalPopulation = "B01001A_001",
+                            SomeCollegeMale18to24Years = "B15001_007",
+                            SomeCollegeMale25to34Years = "B15001_015",                            
+                            SomeCollegeMale35to44Years = "B15001_023",
+                            SomeCollegeMale45to64Years = "B15001_031",
+                            SomeCollegeMale65YearsandOver = "B15001_039",
+                            SomeCollegeFemale18to24Years = "B15001_048",
+                            SomeCollegeFemale25to34Years = "B15001_056",              
+                            SomeCollegeFemale35to44Years = "B15001_064",
+                            SomeCollegeFemale45to64Years = "B15001_072",
+                            SomeCollegeFemale65YearsandOver = "B15001_080"),
+              state = "CA",
+              county = "Sacramento",
+              survey = "acs5",
+              output = "wide",
+              geometry = TRUE)
+
+#looked at file using glimpse()
+glimpse(SomeCollege.tracts1)
+
+#extracted census data using get_acs()
+Associate.tracts1 <- get_acs(geography = "tract",
+              year = 2022,
+              variables = c(TotalPopulation = "B01001A_001",
+                            AssociateMale18to24Years = "B15001_008",
+                            AssociateMale25to34Years = "B15001_016",
+                            AssociateMale35to44Years = "B15001_024",
+                            AssociateMale45to64Years = "B15001_032",
+                            AssociateMale65YearsandOver = "B15001_040",
+                            AssociateFemale18to24Years = "B15001_049",
+                            AssociateFemale25to34Years = "B15001_057",
+                            AssociateFemale35to44Years = "B15001_065",
+                            AssociateFemale45to64Years = "B15001_073",
+                            AssociateFemale65YearsandOver = "B15001_081"),
+              state = "CA",
+              county = "Sacramento",
+              survey = "acs5",
+              output = "wide",
+              geometry = TRUE)
+
+#looked at file using glimpse()
+glimpse(Associate.tracts1)
+
+#extracted census data using get_acs()
+Bachelor.tracts1 <- get_acs(geography = "tract",
+              year = 2022,
+              variables = c(TotalPopulation = "B01001A_001",
+                            BachelorMale18to24Years = "B15001_009",
+                            BachelorMale25to34Years = "B15001_017",
+                            BachelorMale35to44Years = "B15001_025",
+                            BachelorMale45to64Years = "B15001_033",
+                            BachelorMale65YearsandOver = "B15001_041",
+                            BachelorFemale18to24Years = "B15001_050",
+                            BachelorFemale25to34Years = "B15001_058",
+                            BachelorFemale35to44Years = "B15001_066",
+                            BachelorFemale45to64Years = "B15001_074",
+                            BachelorFemale65YearsandOver = "B15001_082"),
+               state = "CA",
+              county = "Sacramento",
+              survey = "acs5",
+              output = "wide",
+              geometry = TRUE)
+
+#looked at file using glimpse()
+glimpse(Bachelor.tracts1)
+
+#extracted census data using get_acs()
+Graduate.tracts1 <- get_acs(geography = "tract",
+              year = 2022,
+              variables = c(TotalPopulation = "B01001A_001",
+                            GraduateMale18to24Years = "B15001_010",
+                            GraduateMale25to34Years = "B15001_018",
+                            GraduateMale35to44Years = "B15001_026",
+                            GraduateMale45to64Years = "B15001_034",
+                            GraduateMale65YearsandOver = "B15001_042",
+                            GraduateFemale18to24Years = "B15001_051",
+                            GraduateFemale25to34Years = "B15001_059",
+                            GraduateFemale35to44Years = "B15001_067",
+                            GraduateFemale45to64Years = "B15001_075",
+                            GraduateFemale65YearsandOver = "B15001_083"),
+              state = "CA",
+              county = "Sacramento",
+              survey = "acs5",
+              output = "wide",
+              geometry = TRUE)
+
+#looked at file using glimpse()
+glimpse(Graduate.tracts1)
+
+```
+
+Data Wrangling - High School
+
+```{r}
+#looked at variables using names()
+names(HighSchool.tracts1)
+
+colnames(HighSchool.tracts1)
+
+#filtered using filter(), cleaned using select() and rename(), calculated total using mutate()
+HighSchool.tracts2 <- HighSchool.tracts1 %>%
+  select(c(GEOID,
+         NAME,
+         TotalPopulationE,
+         HighSchoolMale18to24YearsE,
+         HighSchoolMale25to34YearsE,
+         HighSchoolMale35to44YearsE,
+         HighSchoolMale45to64YearsE,
+         HighSchoolMale65YearsandOverE,
+         HighSchoolFemale18to24YearsE,
+         HighSchoolFemale25to34YearsE,
+         HighSchoolFemale35to44YearsE,
+         HighSchoolFemale45to64YearsE,
+         HighSchoolFemale65YearsandOverE)) %>%
+  rename(TotalPopulation = TotalPopulationE,
+         HighSchoolMale18to24Years = HighSchoolMale18to24YearsE,
+         HighSchoolMale25to34Years = HighSchoolMale25to34YearsE,
+         HighSchoolMale35to44Years = HighSchoolMale35to44YearsE,
+         HighSchoolMale45to64Years = HighSchoolMale45to64YearsE,
+         HighSchoolMale65YearsandOver = HighSchoolMale65YearsandOverE,
+         HighSchoolFemale18to24Years = HighSchoolFemale18to24YearsE,
+         HighSchoolFemale25to34Years = HighSchoolFemale25to34YearsE,
+         HighSchoolFemale35to44Years = HighSchoolFemale35to44YearsE,
+         HighSchoolFemale45to64Years = HighSchoolFemale45to64YearsE,
+         HighSchoolFemale65YearsandOver = HighSchoolFemale65YearsandOverE) %>%
+  mutate(
+    HighSchoolMaleTotal = HighSchoolMale18to24Years +
+                          HighSchoolMale25to34Years +
+                          HighSchoolMale35to44Years +
+                          HighSchoolMale45to64Years +
+                          HighSchoolMale65YearsandOver,
+    HighSchoolFemaleTotal = HighSchoolFemale18to24Years +
+                            HighSchoolFemale25to34Years +
+                            HighSchoolFemale35to44Years +
+                            HighSchoolFemale45to64Years +
+                            HighSchoolFemale65YearsandOver,
+    TotalHighSchoolPercentage = ((HighSchoolMaleTotal + HighSchoolFemaleTotal) / TotalPopulation) * 100
+  )
+
+#looked at file using glimpse()
+glimpse(HighSchool.tracts2)
+
+```
+
+Data Wrangling - Some College
+
+```{r}
+#looked at variables using names()
+names(SomeCollege.tracts1)
+
+#filtered using filter(), cleaned using select() and rename(), calculated total using mutate()
+SomeCollege.tracts2 <- SomeCollege.tracts1 %>%
+  select(c(GEOID,
+         NAME,
+         TotalPopulationE,
+         SomeCollegeMale18to24YearsE,
+         SomeCollegeMale25to34YearsE,                            
+         SomeCollegeMale35to44YearsE,
+         SomeCollegeMale45to64YearsE,
+         SomeCollegeMale65YearsandOverE,
+         SomeCollegeFemale18to24YearsE,
+         SomeCollegeFemale25to34YearsE,                            
+         SomeCollegeFemale35to44YearsE,
+         SomeCollegeFemale45to64YearsE,
+         SomeCollegeFemale65YearsandOverE)) %>%
+  rename(TotalPopulation = TotalPopulationE,
+         SomeCollegeMale18to24Years = SomeCollegeMale18to24YearsE,
+         SomeCollegeMale25to34Years = SomeCollegeMale25to34YearsE,                            
+         SomeCollegeMale35to44Years = SomeCollegeMale35to44YearsE,
+         SomeCollegeMale45to64Years = SomeCollegeMale45to64YearsE,
+         SomeCollegeMale65YearsandOver = SomeCollegeMale65YearsandOverE,
+         SomeCollegeFemale18to24Years = SomeCollegeFemale18to24YearsE,
+         SomeCollegeFemale25to34Years = SomeCollegeFemale25to34YearsE,                            
+         SomeCollegeFemale35to44Years = SomeCollegeFemale35to44YearsE,
+         SomeCollegeFemale45to64Years = SomeCollegeFemale45to64YearsE,
+         SomeCollegeFemale65YearsandOver = SomeCollegeFemale65YearsandOverE) %>%
+  mutate(
+    SomeCollegeMaleTotal = SomeCollegeMale18to24Years +
+                           SomeCollegeMale25to34Years +
+                           SomeCollegeMale35to44Years +
+                           SomeCollegeMale45to64Years +
+                           SomeCollegeMale65YearsandOver,
+    SomeCollegeFemaleTotal = SomeCollegeFemale18to24Years +
+                             SomeCollegeFemale25to34Years +
+                             SomeCollegeFemale35to44Years +
+                             SomeCollegeFemale45to64Years +
+                             SomeCollegeFemale65YearsandOver,
+    TotalSomeCollegePercentage = ((SomeCollegeMaleTotal + SomeCollegeFemaleTotal) / TotalPopulation) * 100
+  )
+  
+#looked at file using glimpse()
+glimpse(SomeCollege.tracts2)
+
+```
+
+Data Wrangling - Associate's Degree
+
+```{r}
+#looked at variables using names()
+names(Associate.tracts1)
+
+#filtered using filter(), cleaned using select() and rename(), calculated total using mutate()
+Associate.tracts2 <- Associate.tracts1 %>%
+  select(c(GEOID,
+         NAME,
+         TotalPopulationE,
+         AssociateMale18to24YearsE,
+         AssociateMale25to34YearsE,
+         AssociateMale35to44YearsE,
+         AssociateMale45to64YearsE,
+         AssociateMale65YearsandOverE,
+         AssociateFemale18to24YearsE,
+         AssociateFemale25to34YearsE,
+         AssociateFemale35to44YearsE,
+         AssociateFemale45to64YearsE,
+         AssociateFemale65YearsandOverE)) %>%
+  rename(TotalPopulation = TotalPopulationE,
+         AssociateMale18to24Years = AssociateMale18to24YearsE,
+         AssociateMale25to34Years = AssociateMale25to34YearsE,
+         AssociateMale35to44Years = AssociateMale35to44YearsE,
+         AssociateMale45to64Years = AssociateMale45to64YearsE,
+         AssociateMale65YearsandOver = AssociateMale65YearsandOverE,
+         AssociateFemale18to24Years = AssociateFemale18to24YearsE,
+         AssociateFemale25to34Years = AssociateFemale25to34YearsE,
+         AssociateFemale35to44Years = AssociateFemale35to44YearsE,
+         AssociateFemale45to64Years = AssociateFemale45to64YearsE,
+         AssociateFemale65YearsandOver = AssociateFemale65YearsandOverE) %>%
+  mutate(
+    AssociateMaleTotal = AssociateMale18to24Years +
+                         AssociateMale25to34Years +
+                         AssociateMale35to44Years +
+                         AssociateMale45to64Years +
+                         AssociateMale65YearsandOver,
+    AssociateFemaleTotal = AssociateFemale18to24Years +
+                           AssociateFemale25to34Years +
+                           AssociateFemale35to44Years +
+                           AssociateFemale45to64Years +
+                           AssociateFemale65YearsandOver,
+    TotalAssociatePercentage = ((AssociateMaleTotal + AssociateFemaleTotal) / TotalPopulation) * 100
+  )
+  
+#looked at file using glimpse()
+glimpse(Associate.tracts2)
+
+```
+
+Data Wrangling - Bachelor's Degree
+
+```{r}
+#looked at variables using names()
+names(Bachelor.tracts1)
+
+#filtered using filter(), cleaned using select() and rename(), calculated total using mutate()
+Bachelor.tracts2 <- Bachelor.tracts1 %>%
+  select(c(GEOID,
+         NAME,
+         TotalPopulationE,
+         BachelorMale18to24YearsE,
+         BachelorMale25to34YearsE,
+         BachelorMale35to44YearsE,
+         BachelorMale45to64YearsE,
+         BachelorMale65YearsandOverE,
+         BachelorFemale18to24YearsE,
+         BachelorFemale25to34YearsE,
+         BachelorFemale35to44YearsE,
+         BachelorFemale45to64YearsE,
+         BachelorFemale65YearsandOverE)) %>%
+  rename(TotalPopulation = TotalPopulationE,
+         BachelorMale18to24Years = BachelorMale18to24YearsE,
+         BachelorMale25to34Years = BachelorMale25to34YearsE,
+         BachelorMale35to44Years = BachelorMale35to44YearsE,
+         BachelorMale45to64Years = BachelorMale45to64YearsE,
+         BachelorMale65YearsandOver = BachelorMale65YearsandOverE,
+         BachelorFemale18to24Years = BachelorFemale18to24YearsE,
+         BachelorFemale25to34Years = BachelorFemale25to34YearsE,
+         BachelorFemale35to44Years = BachelorFemale35to44YearsE,
+         BachelorFemale45to64Years = BachelorFemale45to64YearsE,
+         BachelorFemale65YearsandOver = BachelorFemale65YearsandOverE) %>%
+  mutate(
+    BachelorMaleTotal = BachelorMale18to24Years +
+                        BachelorMale25to34Years +
+                        BachelorMale35to44Years +
+                        BachelorMale45to64Years +
+                        BachelorMale65YearsandOver,
+    BachelorFemaleTotal = BachelorFemale18to24Years +
+                          BachelorFemale25to34Years +
+                          BachelorFemale35to44Years +
+                          BachelorFemale45to64Years +
+                          BachelorFemale65YearsandOver,
+    TotalBachelorPercentage = ((BachelorMaleTotal + BachelorFemaleTotal) / TotalPopulation) * 100
+  )
+  
+#looked at file using glimpse()
+glimpse(Bachelor.tracts2)
+
+```
+
+Data Wrangling - Graduate Degree
+
+```{r}
+#looked at variables using names()
+names(Graduate.tracts1)
+
+#filtered using filter(), cleaned using select() and rename(), calculated total using mutate()
+Graduate.tracts2 <- Graduate.tracts1 %>%
+  select(c(GEOID,
+         NAME,
+         TotalPopulationE,
+         GraduateMale18to24YearsE,
+         GraduateMale25to34YearsE,
+         GraduateMale35to44YearsE,
+         GraduateMale45to64YearsE,
+         GraduateMale65YearsandOverE,
+         GraduateFemale18to24YearsE,
+         GraduateFemale25to34YearsE,
+         GraduateFemale35to44YearsE,
+         GraduateFemale45to64YearsE,
+         GraduateFemale65YearsandOverE)) %>%
+  rename(TotalPopulation = TotalPopulationE,
+         GraduateMale18to24Years = GraduateMale18to24YearsE,
+         GraduateMale25to34Years = GraduateMale25to34YearsE,
+         GraduateMale35to44Years = GraduateMale35to44YearsE,
+         GraduateMale45to64Years = GraduateMale45to64YearsE,
+         GraduateMale65YearsandOver = GraduateMale65YearsandOverE,
+         GraduateFemale18to24Years = GraduateFemale18to24YearsE,
+         GraduateFemale25to34Years = GraduateFemale25to34YearsE,
+         GraduateFemale35to44Years = GraduateFemale35to44YearsE,
+         GraduateFemale45to64Years = GraduateFemale45to64YearsE,
+         GraduateFemale65YearsandOver = GraduateFemale65YearsandOverE) %>%
+mutate(
+    GraduateMaleTotal = GraduateMale18to24Years +
+                        GraduateMale25to34Years +
+                        GraduateMale35to44Years +
+                        GraduateMale45to64Years +
+                        GraduateMale65YearsandOver,
+    GraduateFemaleTotal = GraduateFemale18to24Years +
+                          GraduateFemale25to34Years +
+                          GraduateFemale35to44Years +
+                          GraduateFemale45to64Years +
+                          GraduateFemale65YearsandOver,
+    TotalGraduatePercentage = ((GraduateMaleTotal + GraduateFemaleTotal) / TotalPopulation) * 100
+  )
+
+#looked at file using glimpse()
+glimpse(Graduate.tracts2)
+
+```
+
+Mapping
+
+```{r}
+#created exploratory mapping using tm_shape(), defined units as miles using tm_shape(), used quantile style, used green shades,used border.alpha to remove border, kept legend title blank, defined scale breaks in 0, 1, and 2 miles, added compass, used  legend.outside = TRUE to position legend outside frame of map, used main.title.size and legend.title.size for title size
+map <- tm_shape(HighSchool.tracts2, unit = "mi") +
+  tm_polygons(col = "TotalHighSchoolPercentage",
+              style = "quantile",
+              palette = "Purples", 
+              border.alpha = 0, 
+              title = "High School Diploma and Equivalency (%)") +
+  tm_scale_bar(breaks = c(0, 1, 2), text.size = 0.75, position = c("right", "bottom")) +
+  tm_compass(type = "4star", position = c("left", "top"), size = 2) +
+  tm_layout(main.title = "High School Diploma and Equivalency Population (Sacramento County)",
+            main.title.size = 0.75, frame = FALSE,
+            main.title.position = "center",
+            legend.outside = TRUE,
+            legend.title.size = 0.6)
+
+# Save the map as a PNG file with 16:9 aspect ratio
+tmap_save(map, filename = "high_school_diploma_population_map.png", 
+          width = 1600, height = 900)
+
+#created exploratory mapping using tm_shape(), defined units as miles using tm_shape(), used quantile style, used green shades,used border.alpha to remove border, kept legend title blank, defined scale breaks in 0, 1, and 2 miles, added compass, used  legend.outside = TRUE to position legend outside frame of map
+map <- tm_shape(SomeCollege.tracts2, unit = "mi") +
+  tm_polygons(col = "TotalSomeCollegePercentage",
+              style = "quantile",
+              palette = "Purples",  
+              border.alpha = 0, 
+              title = "Some College, No Degree Population (%)") +
+  tm_scale_bar(breaks = c(0, 1, 2), text.size = 0.75, position = c("right", "bottom")) +
+  tm_compass(type = "4star", position = c("left", "top"), size = 2) +
+  tm_layout(main.title = "Some College, No Degree Population (Sacramento County)",
+            main.title.size = 0.75, frame = FALSE,
+            main.title.position = "center",
+            legend.outside = TRUE,
+            legend.title.size = 0.6)
+
+# Save the map as a PNG file with 16:9 aspect ratio
+tmap_save(map, filename = "some_college_no_degree_population_map.png", 
+          width = 1600, height = 900)
+
+#created exploratory mapping using tm_shape(), defined units as miles using tm_shape(), used quantile style, used green shades,used border.alpha to remove border, kept legend title blank, defined scale breaks in 0, 1, and 2 miles, added compass, used  legend.outside = TRUE to position legend outside frame of map, used main.title.size and legend.title.size for title size
+map <- tm_shape(Associate.tracts2, unit = "mi") +
+  tm_polygons(col = "TotalAssociatePercentage",
+              style = "quantile",
+              palette = "Purples", 
+              border.alpha = 0, 
+              title = "Associate's Degree Population (%)") +
+  tm_scale_bar(breaks = c(0, 1, 2), text.size = 0.75, position = c("right", "bottom")) +
+  tm_compass(type = "4star", position = c("left", "top"), size = 2) +
+  tm_layout(main.title = "Associate's Degree Population (Sacramento County)",
+            main.title.size = 0.75, frame = FALSE,
+            main.title.position = "center",
+            legend.outside = TRUE,
+            legend.title.size = 0.6)
+
+# Save the map as a PNG file with 16:9 aspect ratio
+tmap_save(map, filename = "associate_degree_population_map.png", 
+          width = 1600, height = 900)
+
+#created exploratory mapping using tm_shape(), defined units as miles using tm_shape(), used quantile style, used green shades,used border.alpha to remove border, kept legend title blank, defined scale breaks in 0, 1, and 2 miles, added compass, used  legend.outside = TRUE to position legend outside frame of map, used main.title.size and legend.title.size for title size
+map <- tm_shape(Bachelor.tracts2, unit = "mi") +
+  tm_polygons(col = "TotalBachelorPercentage",
+              style = "quantile",
+              palette = "Purples", 
+              border.alpha = 0, 
+              title = "Bachelor's Degree Population (%)") +
+  tm_scale_bar(breaks = c(0, 1, 2), text.size = 0.75, position = c("right", "bottom")) +
+  tm_compass(type = "4star", position = c("left", "top"), size = 2) +
+  tm_layout(main.title = "Bachelor's Degree Population (Sacramento County)",
+            main.title.size = 0.75, frame = FALSE,
+            main.title.position = "center",
+            legend.outside = TRUE,
+            legend.title.size = 0.6)
+
+# Save the map as a PNG file with 16:9 aspect ratio
+tmap_save(map, filename = "bachelor_degree_population_map.png", 
+          width = 1600, height = 900)
+
+#created exploratory mapping using tm_shape(), defined units as miles using tm_shape(), used quantile style, used green shades,used border.alpha to remove border, kept legend title blank, defined scale breaks in 0, 1, and 2 miles, added compass, used  legend.outside = TRUE to position legend outside frame of map, used main.title.size and legend.title.size for title size
+map <- tm_shape(Graduate.tracts2, unit = "mi") +
+  tm_polygons(col = "TotalGraduatePercentage",
+              style = "quantile",
+              palette = "Purples", 
+              border.alpha = 0, 
+              title = "Graduate or Professional Degree Population (%)") +
+  tm_scale_bar(breaks = c(0, 1, 2), text.size = 0.75, position = c("right", "bottom")) +
+  tm_compass(type = "4star", position = c("left", "top"), size = 2) +
+  tm_layout(main.title = "Graduate or Professional Degree Population (Sacramento County)",
+            main.title.size = 0.75, frame = FALSE,
+            main.title.position = "center",
+            legend.outside = TRUE,
+            legend.title.size = 0.6)
+
+# Save the map as a PNG file with 16:9 aspect ratio
+tmap_save(map, filename = "graduate_degree_population_map.png", 
+          width = 1600, height = 900)
+
+```
