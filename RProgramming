@@ -1,11 +1,11 @@
 ---
-title: "Educational Attainment and Mental Health"
-subtitle: What is the correlation between educational attainment and mental health in Sacramento County?
-author: Vicky Wong
-school: University of California, Davis
-class: CRD 150: Quantitative Methods in Community Research
-date: December 21, 2024
-output: 
+Title: "Educational Attainment and Mental Health"
+Subtitle: What is the correlation between educational attainment and mental health in Sacramento County?
+Author: Vicky Wong
+School: University of California, Davis
+Class: CRD 150: Quantitative Methods in Community Research
+Date: December 21, 2024
+Output: 
   html_document:
     theme: cosmo
 ---
