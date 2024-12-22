@@ -39,7 +39,7 @@ Setup
 
 ```{r}
 #set working directory using setwd()
-setwd("C:/Users/VickyWong/Documents/EducationalAttainmentandMentalHealthFolder")
+setwd("C:/Users/redef/OneDrive/Documents/Winter 2024 - DO NOT DELETE/CRD 150/Final Term Project")
 ```
 
 1) Depression 2) Fair or Poor 3) Mental Health
@@ -684,7 +684,7 @@ glimpse(Census)
 #extracted census data using get_acs()
 HighSchool.tracts1 <- get_acs(geography = "tract",
               year = 2022,
-              variables = c(TotalPopulation = "B01001A_001",
+              variables = c(TotalPopulation = "B01001_001",
                             HighSchoolMale18to24Years = "B15001_006",
                             HighSchoolMale25to34Years = "B15001_014",
                             HighSchoolMale35to44Years = "B15001_022",
@@ -707,7 +707,7 @@ glimpse(HighSchool.tracts1)
 #extracted census data using get_acs()
 SomeCollege.tracts1 <- get_acs(geography = "tract",
               year = 2022,
-              variables = c(TotalPopulation = "B01001A_001",
+              variables = c(TotalPopulation = "B01001_001",
                             SomeCollegeMale18to24Years = "B15001_007",
                             SomeCollegeMale25to34Years = "B15001_015",                            
                             SomeCollegeMale35to44Years = "B15001_023",
@@ -730,7 +730,7 @@ glimpse(SomeCollege.tracts1)
 #extracted census data using get_acs()
 Associate.tracts1 <- get_acs(geography = "tract",
               year = 2022,
-              variables = c(TotalPopulation = "B01001A_001",
+              variables = c(TotalPopulation = "B01001_001",
                             AssociateMale18to24Years = "B15001_008",
                             AssociateMale25to34Years = "B15001_016",
                             AssociateMale35to44Years = "B15001_024",
@@ -753,7 +753,7 @@ glimpse(Associate.tracts1)
 #extracted census data using get_acs()
 Bachelor.tracts1 <- get_acs(geography = "tract",
               year = 2022,
-              variables = c(TotalPopulation = "B01001A_001",
+              variables = c(TotalPopulation = "B01001_001",
                             BachelorMale18to24Years = "B15001_009",
                             BachelorMale25to34Years = "B15001_017",
                             BachelorMale35to44Years = "B15001_025",
@@ -776,7 +776,7 @@ glimpse(Bachelor.tracts1)
 #extracted census data using get_acs()
 Graduate.tracts1 <- get_acs(geography = "tract",
               year = 2022,
-              variables = c(TotalPopulation = "B01001A_001",
+              variables = c(TotalPopulation = "B01001_001",
                             GraduateMale18to24Years = "B15001_010",
                             GraduateMale25to34Years = "B15001_018",
                             GraduateMale35to44Years = "B15001_026",
