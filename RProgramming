@@ -39,7 +39,7 @@ Setup
 
 ```{r}
 #set working directory using setwd()
-setwd("C:/Users/redef/OneDrive/Documents/Winter 2024 - DO NOT DELETE/CRD 150/Final Term Project")
+setwd("C:/Users/VickyWong/Documents/CRD 150/Educational Attainment and Mental Health")
 ```
 
 1) Depression 2) Fair or Poor 3) Mental Health
