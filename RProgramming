@@ -1073,7 +1073,7 @@ map <- tm_shape(HighSchool.tracts2, unit = "mi") +
             legend.outside = TRUE,
             legend.title.size = 0.6)
 
-# Save the map as a PNG file with 16:9 aspect ratio
+#saved the map as a PNG file with 16:9 aspect ratio
 tmap_save(map, filename = "high_school_diploma_population_map.png", 
           width = 1600, height = 900)
 
@@ -1092,7 +1092,7 @@ map <- tm_shape(SomeCollege.tracts2, unit = "mi") +
             legend.outside = TRUE,
             legend.title.size = 0.6)
 
-# Save the map as a PNG file with 16:9 aspect ratio
+#saved the map as a PNG file with 16:9 aspect ratio
 tmap_save(map, filename = "some_college_no_degree_population_map.png", 
           width = 1600, height = 900)
 
@@ -1111,7 +1111,7 @@ map <- tm_shape(Associate.tracts2, unit = "mi") +
             legend.outside = TRUE,
             legend.title.size = 0.6)
 
-# Save the map as a PNG file with 16:9 aspect ratio
+#saved the map as a PNG file with 16:9 aspect ratio
 tmap_save(map, filename = "associate_degree_population_map.png", 
           width = 1600, height = 900)
 
@@ -1130,7 +1130,7 @@ map <- tm_shape(Bachelor.tracts2, unit = "mi") +
             legend.outside = TRUE,
             legend.title.size = 0.6)
 
-# Save the map as a PNG file with 16:9 aspect ratio
+#saved the map as a PNG file with 16:9 aspect ratio
 tmap_save(map, filename = "bachelor_degree_population_map.png", 
           width = 1600, height = 900)
 
@@ -1149,7 +1149,7 @@ map <- tm_shape(Graduate.tracts2, unit = "mi") +
             legend.outside = TRUE,
             legend.title.size = 0.6)
 
-# Save the map as a PNG file with 16:9 aspect ratio
+#saved the map as a PNG file with 16:9 aspect ratio
 tmap_save(map, filename = "graduate_degree_population_map.png", 
           width = 1600, height = 900)
 
