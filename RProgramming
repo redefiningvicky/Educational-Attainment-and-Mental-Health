@@ -180,7 +180,7 @@ class(HighSchool.MentalHealth$mhlth)
 #used as.numeric() to set variable as numeric
 HighSchool.MentalHealth$mhlth <- as.numeric(as.character(HighSchool.MentalHealth$mhlth))
 
-# Used scatterplot to determine correlation between numeric variables, used geom_point()
+#used scatterplot to determine correlation between numeric variables, used geom_point()
 ggplot(HighSchool.MentalHealth) +
     geom_point(mapping = aes(x=phs, y=mhlth)) +
     ggtitle("Correlation Between High School Diploma and Not Good Mental Health Days (Sacramento County)") +
@@ -191,7 +191,7 @@ ggplot(HighSchool.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)  
     )
 
-# Save the scatterplot
+#saved scatterplot
 phsmhlth <- ggplot(HighSchool.MentalHealth) +
     geom_point(mapping = aes(x=phs, y=mhlth)) +
     ggtitle("Correlation Between High School Diploma and Not Good Mental Health Days (Sacramento County)") +
@@ -202,7 +202,7 @@ phsmhlth <- ggplot(HighSchool.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)  
     )
 
-# Save the scatterplot using ggsave()
+#saved scatterplot using ggsave()
 ggsave("phsmhlth1.png", phsmhlth, width = 16, height = 9, units = "in", dpi = 300)
 
 #calculated correlation using cor()
@@ -254,7 +254,7 @@ class(GED.MentalHealth$mhlth)
 #used as.numeric() to set variable as numeric
 GED.MentalHealth$mhlth <- as.numeric(as.character(GED.MentalHealth$mhlth))
 
-# Used scatterplot to determine correlation between numeric variables, used geom_point()
+#used scatterplot to determine correlation between numeric variables, used geom_point()
 ggplot(GED.MentalHealth) +
     geom_point(mapping = aes(x=pged, y=mhlth)) +
     ggtitle("Correlation Between GED and Not Good Mental Health Days (Sacramento County)") +
@@ -265,7 +265,7 @@ ggplot(GED.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)  
     )
 
-# Saved scatterplot
+#saved scatterplot
 pgedmhlth <- ggplot(GED.MentalHealth) +
     geom_point(mapping = aes(x=pged, y=mhlth)) +
     ggtitle("Correlation Between GED and Not Good Mental Health Days (Sacramento County)") +
@@ -276,7 +276,7 @@ pgedmhlth <- ggplot(GED.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Saved scatterplot using ggsave()
+#saved scatterplot using ggsave()
 ggsave("pgedmhlth1.png", pgedmhlth, width = 16, height = 9, units = "in", dpi = 300)
 
 
@@ -329,7 +329,7 @@ class(SomeCollegeAssociate.MentalHealth$mhlth)
 #used as.numeric() to set variable as numeric
 SomeCollegeAssociate.MentalHealth$mhlth <- as.numeric(as.character(SomeCollegeAssociate.MentalHealth$mhlth))
 
-# Used scatterplot to determine correlation between numeric variables, used geom_point()
+#used scatterplot to determine correlation between numeric variables, used geom_point()
 ggplot(SomeCollegeAssociate.MentalHealth) +
     geom_point(mapping = aes(x=psmcolass, y=mhlth)) +
     ggtitle("Correlation Between Some College or Associate's Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -340,7 +340,7 @@ ggplot(SomeCollegeAssociate.MentalHealth) +
     xlab("Percentage Population with Some College or Associate's Degree") +
     ylab("Percentage Population with Mental Health Not Good for >= 14 Days")
 
-# Saved scatterplot
+#saved scatterplot
 psmcolassmhlth <- ggplot(SomeCollegeAssociate.MentalHealth) +
     geom_point(mapping = aes(x=psmcolass, y=mhlth)) +
     ggtitle("Correlation Between Some College or Associate's Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -351,7 +351,7 @@ psmcolassmhlth <- ggplot(SomeCollegeAssociate.MentalHealth) +
     xlab("Percentage Population with Some College or Associate's Degree") +
     ylab("Percentage Population with Mental Health Not Good for >= 14 Days")
 
-# Saved scatterplot using ggsave()
+#saved scatterplot using ggsave()
 ggsave("psmcolassmhlth1.png", psmcolassmhlth, width = 16, height = 9, units = "in", dpi = 300)
 
 #calculated correlation using cor()
@@ -403,7 +403,7 @@ class(Bachelor.MentalHealth$mhlth)
 #used as.numeric() to set variable as numeric
 Bachelor.MentalHealth$mhlth <- as.numeric(as.character(Bachelor.MentalHealth$mhlth))
 
-# Used scatterplot to determine correlation between numeric variables, used geom_point()
+#used scatterplot to determine correlation between numeric variables, used geom_point()
 ggplot(Bachelor.MentalHealth) +
     geom_point(mapping = aes(x=pbach, y=mhlth)) +
     ggtitle("Correlation Between Bachelor's Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -414,7 +414,7 @@ ggplot(Bachelor.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Saved scatterplot
+#saved scatterplot
 pbachmhlth <- ggplot(Bachelor.MentalHealth) +
     geom_point(mapping = aes(x=pbach, y=mhlth)) +
     ggtitle("Correlation Between Bachelor's Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -425,7 +425,7 @@ pbachmhlth <- ggplot(Bachelor.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Saved scatterplot using ggsave()
+#saved scatterplot using ggsave()
 ggsave("pbachmhlth1.png", pbachmhlth, width = 16, height = 9, units = "in", dpi = 300)
 
 #calculated correlation using cor()
@@ -477,7 +477,7 @@ class(Graduate.MentalHealth$mhlth)
 #used as.numeric() to set variable as numeric
 Graduate.MentalHealth$mhlth <- as.numeric(as.character(Graduate.MentalHealth$mhlth))
 
-# Used scatterplot to determine correlation between numeric variables, used geom_point()
+#used scatterplot to determine correlation between numeric variables, used geom_point()
 ggplot(Graduate.MentalHealth) +
     geom_point(mapping = aes(x=pgtbach, y=mhlth)) +
     ggtitle("Correlation Between Graduate Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -488,7 +488,7 @@ ggplot(Graduate.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Saved scatterplot
+#saved scatterplot
 pgtbachmhlth <- ggplot(Graduate.MentalHealth) +
     geom_point(mapping = aes(x=pgtbach, y=mhlth)) +
     ggtitle("Correlation Between Graduate Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -499,7 +499,7 @@ pgtbachmhlth <- ggplot(Graduate.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Save the scatterplot using ggsave()
+#save the scatterplot using ggsave()
 ggsave("pgtbachmhlth1.png", pgtbachmhlth, width = 16, height = 9, units = "in", dpi = 300)
 
 #calculated correlation using cor()
@@ -551,7 +551,7 @@ class(Professional.MentalHealth$mhlth)
 #used as.numeric() to set variable as numeric
 Professional.MentalHealth$mhlth <- as.numeric(as.character(Professional.MentalHealth$mhlth))
 
-# Used scatterplot to determine correlation between numeric variables, used geom_point()
+#used scatterplot to determine correlation between numeric variables, used geom_point()
 ggplot(Professional.MentalHealth) +
     geom_point(mapping = aes(x=pprofessional, y=mhlth)) +
     ggtitle("Correlation Between Professional Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -562,7 +562,7 @@ ggplot(Professional.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Save the scatterplot with adjusted font size
+#saved scatterplot with adjusted font size
 pprofessionalmhlth <- ggplot(Professional.MentalHealth) +
     geom_point(mapping = aes(x=pprofessional, y=mhlth)) +
     ggtitle("Correlation Between Professional Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -573,7 +573,7 @@ pprofessionalmhlth <- ggplot(Professional.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Save the scatterplot using ggsave()
+#saved scatterplot using ggsave()
 ggsave("pprofessionalmhlth1.png", pprofessionalmhlth, width = 16, height = 9, units = "in", dpi = 300)
 
 #calculated correlation using cor()
@@ -625,7 +625,7 @@ class(Doctorate.MentalHealth$mhlth)
 #used as.numeric() to set variable as numeric
 Doctorate.MentalHealth$mhlth <- as.numeric(as.character(Doctorate.MentalHealth$mhlth))
 
-# Used scatterplot to determine correlation between numeric variables, used geom_point()
+# used scatterplot to determine correlation between numeric variables, used geom_point()
 ggplot(Doctorate.MentalHealth) +
     geom_point(mapping = aes(x=pdoctorate, y=mhlth)) +
     ggtitle("Correlation Between Doctorate Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -636,7 +636,7 @@ ggplot(Doctorate.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Saved scatterplot with adjusted title font size
+#saved scatterplot with adjusted title font size
 pdoctoratemhlth <- ggplot(Doctorate.MentalHealth) +
     geom_point(mapping = aes(x=pdoctorate, y=mhlth)) +
     ggtitle("Correlation Between Doctorate Degree and Not Good Mental Health Days (Sacramento County)") +
@@ -647,7 +647,7 @@ pdoctoratemhlth <- ggplot(Doctorate.MentalHealth) +
         plot.margin = margin(10, 10, 10, 10)
     )
 
-# Save the scatterplot using ggsave
+#saved scatterplot using ggsave
 ggsave("pdoctoratemhlth1.png", pdoctoratemhlth, width = 16, height = 9, units = "in", dpi = 300)
 
 #calculated correlation using cor()
