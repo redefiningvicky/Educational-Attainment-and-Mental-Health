@@ -20,7 +20,7 @@ knitr::opts_knit$set(progress = TRUE, verbose = TRUE)
 Library
 
 ```{r}
-#Loaded in all necessary packages using the function library()
+#loaded in all necessary packages using the function library()
 library(tidyverse)
 library(tidycensus)
 library(flextable)
