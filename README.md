@@ -5,5 +5,5 @@ This project explores the correlation between educational attainment and mental 
 • Language: R <p>
 • Visualization: ArcGIS Online, ArcGIS Storymaps <p>
 ## Website <br>
-This project is a fully functional website, view it live at the following link: [View Website](https://arcg.is/0LeCqz) <p>
+This project is a fully functional website available at the following link: [View Website](https://arcg.is/0LeCqz) <p>
 ![me](https://github.com/redefiningvicky/Educational-Attainment-and-Mental-Health/blob/main/Educational%20Attainment%20and%20Mental%20Health.gif)
