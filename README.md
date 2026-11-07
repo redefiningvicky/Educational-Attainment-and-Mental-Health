@@ -1,4 +1,3 @@
-
 <div align="center">
 
   <h1>🧠 Educational Attainment and Mental Health</h1>
@@ -24,7 +23,8 @@
 
 <hr>
 
-<h2 id="objective">🎯 Objective</h2>
+<a name="objective"></a>
+<h2>🎯 Objective</h2>
 
 <p>
   This project explores the correlation between
@@ -38,7 +38,8 @@
 
 <hr>
 
-<h2 id="project-details">🛠️ Project Details</h2>
+<a name="project-details"></a>
+<h2>🛠️ Project Details</h2>
 
 <p>
   <strong>Tools:</strong> R, ArcGIS Online, ArcGIS StoryMaps
@@ -46,7 +47,8 @@
 
 <hr>
 
-<h2 id="storymaps">🌐 StoryMaps</h2>
+<a name="storymaps"></a>
+<h2>🌐 StoryMaps</h2>
 
 <p>
   <a href="https://arcg.is/0LeCqz">
@@ -56,28 +58,32 @@
 
 <hr>
 
-<h2 id="r-script">🔵 R Script</h2>
+<a name="r-script"></a>
+<h2>🔵 R Script</h2>
 
 <p>
-  <a href="https://github.com/redefiningvicky/Educational-Attainment-and-Mental-Health/blob/main/Code/Educational_Attainment_and_Mental_Health.Rmd">
+  <a href="Code/Educational_Attainment_and_Mental_Health.Rmd">
     View R Script
   </a>
 </p>
 
 <hr>
 
-<h2 id="images">🖼️ Images</h2>
+<a name="images"></a>
+<h2>🖼️ Images</h2>
 
 <h3>Educational Attainment and Mental Health StoryMaps</h3>
 
 <table>
   <tr>
     <td>
-      <img
-        src="https://raw.githubusercontent.com/redefiningvicky/Educational-Attainment-and-Mental-Health/main/Educational_Attainment_and_Mental_Health.gif"
-        alt="Educational Attainment and Mental Health animated StoryMaps preview"
-        width="100%"
-      />
+      <a href="GIF/Educational_Attainment_and_Mental_Health.gif">
+        <img
+          src="GIF/Educational_Attainment_and_Mental_Health.gif"
+          alt="Educational Attainment and Mental Health animated StoryMaps preview"
+          width="100%"
+        />
+      </a>
     </td>
   </tr>
 </table>
